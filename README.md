@@ -136,6 +136,145 @@ The application is optimized for deployment on [Vercel](https://vercel.com):
 4. Push to the branch
 5. Open a Pull Request
 
+## Project File Structure
+
+```
+salespro/
+├── src/
+│   ├── app/
+│   │   ├── (auth)/
+│   │   │   ├── login/
+│   │   │   │   └── page.tsx
+│   │   │   └── layout.tsx
+│   │   ├── dashboard/
+│   │   │   ├── page.tsx
+│   │   │   ├── loading.tsx
+│   │   │   └── layout.tsx
+│   │   ├── leads/
+│   │   │   ├── [id]/
+│   │   │   │   ├── page.tsx
+│   │   │   │   └── loading.tsx
+│   │   │   ├── page.tsx
+│   │   │   └── layout.tsx
+│   │   ├── departments/
+│   │   │   ├── [id]/
+│   │   │   │   └── page.tsx
+│   │   │   └── page.tsx
+│   │   ├── reports/
+│   │   │   └── page.tsx
+│   │   ├── settings/
+│   │   │   └── page.tsx
+│   │   ├── layout.tsx
+│   │   └── page.tsx
+│   ├── components/
+│   │   ├── dashboard/
+│   │   │   ├── metrics-cards.tsx
+│   │   │   ├── activity-feed.tsx
+│   │   │   ├── department-chart.tsx
+│   │   │   └── quick-actions.tsx
+│   │   ├── leads/
+│   │   │   ├── lead-table.tsx
+│   │   │   ├── lead-filters.tsx
+│   │   │   ├── lead-form.tsx
+│   │   │   └── lead-details.tsx
+│   │   ├── departments/
+│   │   │   ├── department-card.tsx
+│   │   │   ├── assignment-panel.tsx
+│   │   │   └── workload-view.tsx
+│   │   ├── shared/
+│   │   │   ├── navigation/
+│   │   │   │   ├── sidebar.tsx
+│   │   │   │   └── top-bar.tsx
+│   │   │   ├── ui/
+│   │   │   │   ├── button.tsx
+│   │   │   │   ├── card.tsx
+│   │   │   │   ├── dialog.tsx
+│   │   │   │   ├── dropdown.tsx
+│   │   │   │   └── table.tsx
+│   │   │   └── charts/
+│   │   │       ├── bar-chart.tsx
+│   │   │       ├── pie-chart.tsx
+│   │   │       └── line-chart.tsx
+│   │   └── layout/
+│   │       ├── header.tsx
+│   │       └── footer.tsx
+│   ├── lib/
+│   │   ├── auth/
+│   │   │   └── auth-options.ts
+│   │   ├── utils/
+│   │   │   ├── date-utils.ts
+│   │   │   └── format-utils.ts
+│   │   └── api/
+│   │       └── api-client.ts
+│   ├── store/
+│   │   ├── slices/
+│   │   │   ├── leads-slice.ts
+│   │   │   └── departments-slice.ts
+│   │   └── store.ts
+│   └── types/
+│       ├── lead.ts
+│       ├── department.ts
+│       └── user.ts
+├── public/
+│   ├── images/
+│   │   └── logo.svg
+│   └── icons/
+├── styles/
+│   └── globals.css
+├── tests/
+│   ├── components/
+│   └── utils/
+├── .env.example
+├── .gitignore
+├── package.json
+├── README.md
+├── tailwind.config.js
+├── tsconfig.json
+└── next.config.js
+```
+
+## Directory Structure Overview
+
+### `/src/app`
+- Next.js 13+ app directory with route groups and layouts
+- Organized by feature (dashboard, leads, departments)
+- Includes loading states and error boundaries
+
+### `/src/components`
+- Feature-based component organization
+- Shared UI components and layouts
+- Chart components for data visualization
+- Reusable form components
+
+### `/src/lib`
+- Authentication configuration
+- Utility functions
+- API client setup
+
+### `/src/store`
+- Redux store configuration
+- Feature-based slices
+- Type-safe state management
+
+### `/src/types`
+- TypeScript interfaces and types
+- Shared type definitions
+
+### `/public`
+- Static assets
+- Images and icons
+- Fonts and other resources
+
+### `/styles`
+- Global CSS configurations
+- Tailwind CSS utilities
+- Theme definitions
+
+### `/tests`
+- Component tests
+- Utility function tests
+- Integration tests
+
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
