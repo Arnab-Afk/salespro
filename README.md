@@ -1,4 +1,4 @@
-<img src=".github/splash.png" alt="Salespro" />
+<img src=".github/gitsplash.png" alt="Salespro" />
 
 ## Project Overview
 
