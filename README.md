@@ -1,36 +1,141 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SalesPro - Lead Management System
+
+## Project Overview
+
+SalesPro is a modern, responsive web application built with Next.js, designed for comprehensive lead tracking and management across multiple departments. The system facilitates efficient lead distribution, seamless interdepartmental collaboration, and detailed progress monitoring through an intuitive user interface.
+
+## Core Features
+
+### Dashboard Overview
+- Real-time metrics and KPI visualization
+- Customizable widgets with drag-and-drop functionality
+- Activity feed showing recent updates
+- Performance analytics with conversion rates
+- Quick actions for lead management
+
+### Lead Management
+- Advanced sortable and filterable lead tables
+- Detailed lead profiles with tabbed interfaces
+- Bulk operations for efficient processing
+- Comprehensive search and filtering system
+- Document attachment capabilities
+
+### Department Collaboration
+- Visual department assignment interface
+- Team workload management
+- Internal commenting system with @mentions
+- Shared notes and transfer history
+- Real-time notifications
+
+### Analytics & Reporting
+- Custom report generation
+- Department-specific KPIs
+- Performance metrics visualization
+- Exportable data in multiple formats
+- Historical trend analysis
+
+## Technology Stack
+
+- **Framework**: Next.js with TypeScript
+- **Styling**: Tailwind CSS
+- **State Management**: Redux Toolkit
+- **UI Components**: Custom components with Shadcn UI
+- **Charts**: Recharts for data visualization
+- **Icons**: Lucide React
+- **Authentication**: NextAuth.js
 
 ## Getting Started
 
-First, run the development server:
+1. **Clone the repository**
+
+```bash
+git clone github.com/arnab-afk/salespro
+cd salespro
+```
+
+2. **Install dependencies**
+
+```bash
+npm install
+# or
+yarn install
+```
+
+3. **Run the development server**
 
 ```bash
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Key UI Screens
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. **Dashboard** - Central hub for metrics and activity
+2. **Lead Management** - Comprehensive lead listing and details
+3. **Department Views** - Department-specific interfaces
+4. **Reports & Analytics** - Data visualization and reporting
+5. **Settings** - System configuration and preferences
+6. **User Management** - Role and permission management
+
+## Development Guidelines
+
+### Code Structure
+- \`/src/components\` - Reusable UI components
+- \`/src/app\` - Next.js application routes
+- \`/src/lib\` - Utility functions and helpers
+- \`/src/store\` - Redux store configuration
+- \`/public\` - Static assets
+
+### Best Practices
+- Follow TypeScript strict mode guidelines
+- Implement responsive design principles
+- Ensure WCAG 2.1 AA compliance
+- Write unit tests for critical components
+- Use appropriate error boundaries
+
+## Accessibility Features
+
+- Keyboard navigation support
+- Screen reader compatibility
+- High contrast mode
+- ARIA labels and roles
+- Focus management
+
+## Performance Optimizations
+
+- Lazy loading for large datasets
+- Image optimization
+- Code splitting
+- Caching strategies
+- Real-time updates
+
+## Deployment
+
+The application is optimized for deployment on [Vercel](https://vercel.com):
+
+1. Push your code to GitHub
+2. Import your repository to Vercel
+3. Configure environment variables
+4. Deploy with one click
 
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Tailwind CSS](https://tailwindcss.com/docs)
+- [Redux Toolkit](https://redux-toolkit.js.org/)
+- [TypeScript](https://www.typescriptlang.org/docs/)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Contributing
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Fork the repository
+2. Create your feature branch
+3. Commit your changes
+4. Push to the branch
+5. Open a Pull Request
 
-## Deploy on Vercel
+## License
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This project is licensed under the MIT License - see the LICENSE file for details.
