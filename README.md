@@ -1,4 +1,4 @@
-# SalesPro - Lead Management System
+<img src=".github/splash.png" alt="Salespro" />
 
 ## Project Overview
 
