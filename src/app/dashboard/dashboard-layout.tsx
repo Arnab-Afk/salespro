@@ -5,8 +5,6 @@ import { useEffect, useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
-import { TenantProvider } from "@/context/tenant-context"
-import { TenantSwitcher } from "@/components/tenant/tenant-switcher"
 import { 
   HomeIcon, 
   DashboardIcon,
@@ -68,8 +66,7 @@ export function DashboardLayout({
   }
 
   return (
-    <TenantProvider>
-      <div className="min-h-screen">
+    <div className="min-h-screen">
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container flex h-14 items-center justify-between">
@@ -83,7 +80,6 @@ export function DashboardLayout({
             />
           </div>
           <div className="flex items-center gap-4">
-            <TenantSwitcher />
             <Button
               variant="outline"
               size="sm"
@@ -148,6 +144,5 @@ export function DashboardLayout({
         </main>
       </div>
       </div>
-    </TenantProvider>
   )
 }
