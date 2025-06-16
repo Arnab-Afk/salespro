@@ -5,6 +5,15 @@ import { useEffect, useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
+import { TenantProvider } from "@/context/tenant-context"
+import { TenantSwitcher } from "@/components/tenant/tenant-switcher"
+import { 
+  HomeIcon, 
+  DashboardIcon,
+  PersonIcon,
+  GearIcon,
+  LayersIcon
+} from "@radix-ui/react-icons"
 export function DashboardLayout({
   children,
 }: {
@@ -59,20 +68,22 @@ export function DashboardLayout({
   }
 
   return (
-    <div className="min-h-screen">
+    <TenantProvider>
+      <div className="min-h-screen">
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container flex h-14 items-center justify-between">
           <div className="flex items-center gap-2">
             <Image
-                        src="/Salespro.svg"
-                        alt="SalesPro"
-                        width={200}
-                        height={80}
-                        className="ml-2"
-                      />
+              src="/Salespro.svg"
+              alt="SalesPro"
+              width={200}
+              height={80}
+              className="ml-2"
+            />
           </div>
           <div className="flex items-center gap-4">
+            <TenantSwitcher />
             <Button
               variant="outline"
               size="sm"
@@ -92,21 +103,38 @@ export function DashboardLayout({
             <div className="space-y-1">
               <Link
                 href="/dashboard"
-                className="flex items-center px-2 py-2 text-sm font-medium rounded-md bg-primary/10 text-primary"
+                className="flex items-center px-2 py-2 text-sm font-medium rounded-md bg-primary/10 text-primary gap-2"
               >
+                <HomeIcon className="h-4 w-4" />
                 Dashboard
               </Link>
               <Link
                 href="/dashboard/leads"
-                className="flex items-center px-2 py-2 text-sm font-medium rounded-md text-muted-foreground hover:bg-primary/10 hover:text-primary"
+                className="flex items-center px-2 py-2 text-sm font-medium rounded-md text-muted-foreground hover:bg-primary/10 hover:text-primary gap-2"
               >
+                <PersonIcon className="h-4 w-4" />
                 Leads
               </Link>
               <Link
                 href="/dashboard/departments"
-                className="flex items-center px-2 py-2 text-sm font-medium rounded-md text-muted-foreground hover:bg-primary/10 hover:text-primary"
+                className="flex items-center px-2 py-2 text-sm font-medium rounded-md text-muted-foreground hover:bg-primary/10 hover:text-primary gap-2"
               >
+                <DashboardIcon className="h-4 w-4" />
                 Departments
+              </Link>
+              <Link
+                href="/dashboard/integrations"
+                className="flex items-center px-2 py-2 text-sm font-medium rounded-md text-muted-foreground hover:bg-primary/10 hover:text-primary gap-2"
+              >
+                <LayersIcon className="h-4 w-4" />
+                Integrations
+              </Link>
+              <Link
+                href="/dashboard/settings"
+                className="flex items-center px-2 py-2 text-sm font-medium rounded-md text-muted-foreground hover:bg-primary/10 hover:text-primary gap-2"
+              >
+                <GearIcon className="h-4 w-4" />
+                Settings
               </Link>
             </div>
           </nav>
@@ -119,6 +147,7 @@ export function DashboardLayout({
           </div>
         </main>
       </div>
-    </div>
+      </div>
+    </TenantProvider>
   )
 }
