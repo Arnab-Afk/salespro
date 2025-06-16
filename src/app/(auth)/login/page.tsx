@@ -1,11 +1,6 @@
-import { Metadata } from "next"
+'use client'
 import Image from "next/image"
 import { LoginForm } from "@/components/auth/login-form"
-
-export const metadata: Metadata = {
-  title: "Login | SalesPro",
-  description: "Login to your SalesPro account",
-}
 
 export default function LoginPage() {
   return (
