@@ -14,6 +14,7 @@ import {
   List,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 
 const sidebarItems = [
   { href: "/dashboard", label: "Overview", icon: LayoutGrid },
@@ -34,7 +35,7 @@ export default function DashboardLayout({
   return (
     <div className="min-h-screen bg-background">
       {/* Mobile Sidebar Toggle */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 z-20 bg-background border-b p-4">
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-20 bg-background border-b p-4 flex justify-between items-center">
         <Button
           variant="ghost"
           size="icon"
@@ -42,6 +43,7 @@ export default function DashboardLayout({
         >
           {sidebarOpen ? <X /> : <Menu />}
         </Button>
+        <ThemeToggle />
       </div>
 
       {/* Sidebar */}
@@ -51,8 +53,11 @@ export default function DashboardLayout({
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
-        <div className="p-6">
+        <div className="p-6 flex justify-between items-center">
           <h1 className="text-2xl font-bold">SalesPro</h1>
+          <div className="hidden lg:block">
+            <ThemeToggle />
+          </div>
         </div>
         <nav className="space-y-1 px-2">
           {sidebarItems.map((item) => {

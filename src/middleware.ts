@@ -37,22 +37,31 @@ export async function middleware(request: NextRequest) {
   }
 
   // Dashboard protection middleware
-  if (request.nextUrl.pathname.startsWith("/dashboard")) {
-    const completedSteps = request.cookies.get("completed_steps")?.value
-      ? JSON.parse(request.cookies.get("completed_steps")?.value || "[]")
-      : [];
+  if (request.nextUrl.pathname.startsWith("/dashboard") || request.nextUrl.pathname.startsWith("/setup")) {
+    const token = request.cookies.get("auth_token")?.value;
+    
+    if (!token) {
+      return NextResponse.redirect(new URL("/login", request.url));
+    }
 
-    // Check if setup is complete
-    const isSetupComplete = setupSteps.every(step => completedSteps.includes(step));
+    // Only check setup completion for dashboard routes
+    if (request.nextUrl.pathname.startsWith("/dashboard")) {
+      const completedSteps = request.cookies.get("completed_steps")?.value
+        ? JSON.parse(request.cookies.get("completed_steps")?.value || "[]")
+        : [];
 
-    if (!isSetupComplete) {
-      // Redirect to setup if not complete
-      const firstIncompleteStep = setupSteps.find(step => !completedSteps.includes(step));
-      const redirectUrl = firstIncompleteStep 
-        ? `/setup/${firstIncompleteStep}`
-        : "/setup";
-        
-      return NextResponse.redirect(new URL(redirectUrl, request.url));
+      // Check if setup is complete
+      const isSetupComplete = setupSteps.every(step => completedSteps.includes(step));
+
+      if (!isSetupComplete) {
+        // Redirect to setup if not complete
+        const firstIncompleteStep = setupSteps.find(step => !completedSteps.includes(step));
+        const redirectUrl = firstIncompleteStep 
+          ? `/setup/${firstIncompleteStep}`
+          : "/setup";
+          
+        return NextResponse.redirect(new URL(redirectUrl, request.url));
+      }
     }
   }
 
@@ -60,5 +69,9 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/setup/:path*", "/dashboard/:path*"],
+  matcher: [
+    "/setup/:path*",
+    "/dashboard/:path*",
+    "/((?!api|_next/static|_next/image|favicon.ico|login|auth/callback).*)",
+  ],
 };

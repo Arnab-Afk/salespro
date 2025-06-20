@@ -15,12 +15,30 @@ export default function AuthCallback() {
 
     if (access_token) {
       try {
+        // Save token to cookies
+        document.cookie = `auth_token=${access_token}; path=/; max-age=2592000`; // 30 days
+        
         setAuthData({
           accessToken: access_token,
           idToken: id_token,
         });
+
+        // Check for redirect cookie
+        const redirectCookie = document.cookie
+          .split('; ')
+          .find(row => row.startsWith('auth_redirect='));
+
+        const redirectPath = redirectCookie 
+          ? decodeURIComponent(redirectCookie.split('=')[1])
+          : '/dashboard';
+
+        // Clear redirect cookie
+        if (redirectCookie) {
+          document.cookie = 'auth_redirect=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT';
+        }
+
         // Use replace to prevent back button from returning to callback
-        router.replace('/dashboard');
+        router.replace(redirectPath);
       } catch (error) {
         console.error('Failed to parse user info:', error);
         setError('Authentication failed. Please try again.');

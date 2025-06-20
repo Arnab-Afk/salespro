@@ -1,112 +1,160 @@
 "use client";
 
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import {
-  LineChart,
-  UserPlus2,
-  Hourglass,
-  CheckCircle2,
-  Plus,
+  BarChart3,
+  DollarSign,
+  Users,
+  ArrowUpRight,
+  ArrowDownRight,
+  Phone,
+  Mail,
+  Calendar
 } from "lucide-react";
+import Link from "next/link";
+
+const stats = [
+  {
+    title: "Total Leads",
+    value: "164",
+    change: "+12%",
+    trend: "up",
+    icon: Users
+  },
+  {
+    title: "Pipeline Value",
+    value: "$425,000",
+    change: "+8%",
+    trend: "up",
+    icon: DollarSign
+  },
+  {
+    title: "Conversion Rate",
+    value: "32%",
+    change: "-5%",
+    trend: "down",
+    icon: BarChart3
+  }
+];
+
+const recentActivity = [
+  {
+    type: "call",
+    lead: "John Smith",
+    time: "10 mins ago",
+    icon: Phone
+  },
+  {
+    type: "email",
+    lead: "Sarah Johnson",
+    time: "1 hour ago",
+    icon: Mail
+  },
+  {
+    type: "meeting",
+    lead: "Mike Brown",
+    time: "3 hours ago",
+    icon: Calendar
+  }
+];
 
 export default function DashboardPage() {
   return (
     <div className="space-y-8">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">Dashboard</h1>
-        <Button>
-          <Plus className="h-4 w-4 mr-2" /> Add Lead
-        </Button>
+        <div className="text-sm text-muted-foreground">
+          Last updated: {new Date().toLocaleDateString()}
+        </div>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        <Card className="p-6">
-          <div className="flex items-center gap-4">
-            <div className="p-3 bg-primary/10 rounded-full">
-              <UserPlus2 className="h-6 w-6 text-primary" />
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">New Leads</p>
-              <h3 className="text-2xl font-bold">24</h3>
-            </div>
-          </div>
-        </Card>
-
-        <Card className="p-6">
-          <div className="flex items-center gap-4">
-            <div className="p-3 bg-yellow-500/10 rounded-full">
-              <Hourglass className="h-6 w-6 text-yellow-500" />
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">In Progress</p>
-              <h3 className="text-2xl font-bold">12</h3>
-            </div>
-          </div>
-        </Card>
-
-        <Card className="p-6">
-          <div className="flex items-center gap-4">
-            <div className="p-3 bg-green-500/10 rounded-full">
-              <CheckCircle2 className="h-6 w-6 text-green-500" />
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Converted</p>
-              <h3 className="text-2xl font-bold">8</h3>
-            </div>
-          </div>
-        </Card>
-
-        <Card className="p-6">
-          <div className="flex items-center gap-4">
-            <div className="p-3 bg-blue-500/10 rounded-full">
-              <LineChart className="h-6 w-6 text-blue-500" />
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Conversion Rate</p>
-              <h3 className="text-2xl font-bold">33%</h3>
-            </div>
-          </div>
-        </Card>
-      </div>
-
-      <div className="grid gap-6 md:grid-cols-2">
-        <Card className="p-6">
-          <h2 className="text-lg font-semibold mb-4">Recent Leads</h2>
-          <div className="space-y-4">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="flex items-center justify-between p-4 bg-muted rounded-lg">
-                <div>
-                  <p className="font-medium">John Smith {i}</p>
-                  <p className="text-sm text-muted-foreground">john{i}@example.com</p>
+      {/* Stats Grid */}
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {stats.map((stat) => {
+          const Icon = stat.icon;
+          return (
+            <Card key={stat.title} className="p-6">
+              <div className="flex items-center justify-between">
+                <div className="bg-primary/10 p-3 rounded-lg">
+                  <Icon className="h-6 w-6 text-primary" />
                 </div>
-                <Button variant="ghost" size="sm">View Details</Button>
+                <div className={`flex items-center gap-1 text-sm ${
+                  stat.trend === "up" ? "text-green-500" : "text-red-500"
+                }`}>
+                  {stat.change}
+                  {stat.trend === "up" ? (
+                    <ArrowUpRight className="h-4 w-4" />
+                  ) : (
+                    <ArrowDownRight className="h-4 w-4" />
+                  )}
+                </div>
+              </div>
+              <div className="mt-4">
+                <p className="text-sm text-muted-foreground">{stat.title}</p>
+                <p className="text-2xl font-bold">{stat.value}</p>
+              </div>
+            </Card>
+          );
+        })}
+      </div>
+
+      {/* Recent Activity */}
+      <div className="grid gap-4 md:grid-cols-2">
+        <Card className="p-6">
+          <h2 className="text-lg font-semibold mb-4">Recent Activity</h2>
+          <div className="space-y-4">
+            {recentActivity.map((activity, index) => {
+              const Icon = activity.icon;
+              return (
+                <div key={index} className="flex items-center gap-4">
+                  <div className="bg-muted p-2 rounded-full">
+                    <Icon className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="font-medium">{activity.lead}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {activity.type} · {activity.time}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <Link
+            href="/dashboard/leads"
+            className="text-sm text-primary hover:underline block mt-4"
+          >
+            View all activity
+          </Link>
+        </Card>
+
+        {/* Pipeline Overview */}
+        <Card className="p-6">
+          <h2 className="text-lg font-semibold mb-4">Pipeline Overview</h2>
+          <div className="space-y-4">
+            {[
+              { stage: "Lead", count: 45, value: "$225,000" },
+              { stage: "Qualified", count: 28, value: "$140,000" },
+              { stage: "Proposal", count: 12, value: "$60,000" },
+              { stage: "Won", count: 8, value: "$40,000" },
+            ].map((stage) => (
+              <div key={stage.stage} className="flex items-center justify-between">
+                <div>
+                  <p className="font-medium">{stage.stage}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {stage.count} leads
+                  </p>
+                </div>
+                <p className="font-semibold">{stage.value}</p>
               </div>
             ))}
           </div>
-          <div className="mt-4">
-            <Link href="/dashboard/leads" className="text-sm text-muted-foreground hover:text-primary">
-              View all leads →
-            </Link>
-          </div>
-        </Card>
-
-        <Card className="p-6">
-          <h2 className="text-lg font-semibold mb-4">Team Activity</h2>
-          <div className="space-y-4">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="flex items-center gap-4">
-                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                  {i}
-                </div>
-                <div>
-                  <p className="text-sm"><span className="font-medium">Sarah Wilson</span> converted a lead</p>
-                  <p className="text-xs text-muted-foreground">2 hours ago</p>
-                </div>
-              </div>
-            ))}
-          </div>
+          <Link
+            href="/dashboard/leads"
+            className="text-sm text-primary hover:underline block mt-4"
+          >
+            View full pipeline
+          </Link>
         </Card>
       </div>
     </div>
