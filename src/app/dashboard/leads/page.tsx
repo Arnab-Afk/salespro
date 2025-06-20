@@ -4,12 +4,30 @@ import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
   Plus,
   MoreVertical,
   ArrowLeftRight,
   Mail,
   Phone,
+  Pencil,
+  Trash2,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { LeadForm } from "@/components/leads/lead-form";
 import {
   DragDropContext,
   Droppable,
@@ -44,6 +62,7 @@ const mockLeads: Record<string, Lead[]> = {
 };
 
 export default function LeadsPage() {
+  const router = useRouter();
   const [leads, setLeads] = useState(mockLeads);
 
   const onDragEnd = (result: DropResult) => {
@@ -82,9 +101,42 @@ export default function LeadsPage() {
     <div className="space-y-8">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">Leads Pipeline</h1>
-        <Button>
-          <Plus className="h-4 w-4 mr-2" /> Add Lead
-        </Button>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button>
+              <Plus className="h-4 w-4 mr-2" /> Add Lead
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-3xl">
+            <DialogHeader>
+              <DialogTitle>Add New Lead</DialogTitle>
+              <DialogDescription>
+                Enter the lead's information below.
+              </DialogDescription>
+            </DialogHeader>
+            <LeadForm 
+              onSubmit={(data) => {
+                console.log(data); // Replace with actual submit logic
+                const newLead = {
+                  id: (leads["Lead"].length + 1).toString(),
+                  name: data.name,
+                  email: data.email,
+                  phone: data.phone,
+                  stage: data.stage,
+                  value: parseInt(data.value),
+                };
+                
+                setLeads({
+                  ...leads,
+                  [data.stage]: [...leads[data.stage], newLead],
+                });
+              }}
+              onCancel={() => {
+                // Close dialog (This will be handled by Dialog component)
+              }}
+            />
+          </DialogContent>
+        </Dialog>
       </div>
 
       <div className="grid grid-cols-4 gap-4">
@@ -118,27 +170,54 @@ export default function LeadsPage() {
                             {...provided.dragHandleProps}
                             className="p-4 space-y-3"
                           >
-                            <div className="flex items-start justify-between">
-                              <div>
-                                <p className="font-medium">{lead.name}</p>
-                                <p className="text-sm font-medium text-primary">
-                                  {formatCurrency(lead.value)}
+                            <div 
+                              className="cursor-pointer"
+                              onClick={() => router.push(`/dashboard/leads/${lead.id}`)}
+                            >
+                              <div className="flex items-start justify-between">
+                                <div>
+                                  <p className="font-medium">{lead.name}</p>
+                                  <p className="text-sm font-medium text-primary">
+                                    {formatCurrency(lead.value)}
+                                  </p>
+                                </div>
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
+                                    <Button 
+                                      variant="ghost" 
+                                      size="icon"
+                                      onClick={(e) => e.stopPropagation()}
+                                    >
+                                      <MoreVertical className="h-4 w-4" />
+                                    </Button>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent align="end">
+                                    <DropdownMenuItem onSelect={(e: Event) => {
+                                      e.preventDefault();
+                                      window.location.href = `mailto:${lead.email}`;
+                                    }}>
+                                      <Mail className="h-4 w-4 mr-2" /> Email
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem onSelect={(e: Event) => {
+                                      e.preventDefault();
+                                      window.location.href = `tel:${lead.phone}`;
+                                    }}>
+                                      <Phone className="h-4 w-4 mr-2" /> Call
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem>
+                                      <Pencil className="h-4 w-4 mr-2" /> Edit
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem className="text-red-600">
+                                      <Trash2 className="h-4 w-4 mr-2" /> Delete
+                                    </DropdownMenuItem>
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
+                              </div>
+                              <div className="flex gap-3 text-muted-foreground mt-3">
+                                <p className="text-xs">
+                                  {lead.email}
                                 </p>
                               </div>
-                              <Button variant="ghost" size="icon">
-                                <MoreVertical className="h-4 w-4" />
-                              </Button>
-                            </div>
-                            <div className="flex gap-3 text-muted-foreground">
-                              <button className="text-xs flex items-center gap-1 hover:text-primary">
-                                <Mail className="h-3 w-3" /> Email
-                              </button>
-                              <button className="text-xs flex items-center gap-1 hover:text-primary">
-                                <Phone className="h-3 w-3" /> Call
-                              </button>
-                              <button className="text-xs flex items-center gap-1 hover:text-primary">
-                                <ArrowLeftRight className="h-3 w-3" /> Move
-                              </button>
                             </div>
                           </Card>
                         )}
