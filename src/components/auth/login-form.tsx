@@ -55,10 +55,17 @@ export function LoginForm() {
     
     try {
       // Set mock auth data for email/password login
+      const token = "mock-token";
+      
+      // Save to cookies
+      document.cookie = `auth_token=${token}; path=/; max-age=2592000`; // 30 days
+      
       setAuthData({
-        accessToken: "mock-token",
+        accessToken: token,
         idToken: null
       })
+      
+      router.push("/dashboard");
     } catch (error) {
       setError("Invalid email or password")
     } finally {
@@ -67,6 +74,9 @@ export function LoginForm() {
   }
 
   const handleGoogleAuth = () => {
+    // Save origin to cookie for callback
+    document.cookie = `auth_redirect=${window.location.origin}/dashboard; path=/; max-age=300`; // 5 minutes
+    
     const origin = window.location.origin;
     const callbackUrl = `${origin}/auth/callback`;
     const authEndpoint = process.env.NEXT_PUBLIC_AUTH_ENDPOINT || "https://small-mouse-2759.arnabbhowmik019.workers.dev";
