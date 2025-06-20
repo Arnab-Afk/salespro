@@ -9,7 +9,7 @@ export default function LoginPage() {
         <div className="absolute inset-0 bg-zinc-900" />
         <div className="relative z-20 flex items-center text-lg font-medium mt-[-20px]">
           <Image
-            src="/darkmode-logo.svg"
+            src="/darkmode-logo-login.svg"
             alt="SalesPro"
             width={200}
             height={80}
