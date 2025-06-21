@@ -5,8 +5,13 @@ import { LoginForm } from "@/components/auth/login-form"
 export default function LoginPage() {
   return (
     <div className="container relative h-screen flex-col items-center justify-center grid lg:max-w-none lg:grid-cols-2 lg:px-0">
-      <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex dark:border-r">
-        <div className="absolute inset-0 bg-zinc-900" />
+      <div
+        className="relative hidden h-full flex-col p-10 text-white lg:flex dark:border-r bg-cover bg-center"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(20,20,20,0.7),rgba(20,20,20,0.7)), url('https://images.pexels.com/photos/3780104/pexels-photo-3780104.png')"
+        }}
+      >
         <div className="relative z-20 flex items-center text-lg font-medium mt-[-20px]">
           <Image
             src="/darkmode-logo-login.svg"

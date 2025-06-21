@@ -3,15 +3,19 @@
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { PipelineCustomization } from "@/components/settings/pipeline-customization";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { PageHeader } from "@/components/ui/page-header";
 import { Card } from "@/components/ui/card";
+import { CustomFieldsManager } from "@/components/settings/custom-fields";
+import { LeadScoringManager } from "@/components/settings/lead-scoring";
+import { AutomationRulesManager } from "@/components/settings/automation-rules";
 
 export default function SettingsPage() {
   return (
     <div className="space-y-8">
-      <PageHeader page="settings" />
+      <PageHeader title="Settings" description="Manage your application settings" />
 
       <div className="grid gap-8">
         {/* Company Settings */}
@@ -45,6 +49,12 @@ export default function SettingsPage() {
         </Card>
 
         {/* Notification Settings */}
+        <CustomFieldsManager />
+
+        <LeadScoringManager />
+
+        <AutomationRulesManager />
+
         <Card className="p-6">
           <div className="space-y-6">
             <h3 className="text-lg font-medium">Notifications</h3>
@@ -81,6 +91,9 @@ export default function SettingsPage() {
             </div>
           </div>
         </Card>
+
+        {/* Pipeline Settings */}
+        <PipelineCustomization />
 
         {/* Security Settings */}
         <Card className="p-6">
