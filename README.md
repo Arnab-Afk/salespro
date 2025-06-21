@@ -1,5 +1,5 @@
 # SalesPro: Modern Lead Management Platform
-
+<img src=".github/splash.png">
 A powerful, modern lead management and sales pipeline platform built with Next.js 14, React, and TypeScript.
 
 ## Quick Start
