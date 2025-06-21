@@ -1,235 +1,159 @@
 "use client";
 
 import { useState } from "react";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  Plus,
-  MoreVertical,
-  ArrowLeftRight,
-  Mail,
-  Phone,
-  Pencil,
-  Trash2,
-} from "lucide-react";
 import { useRouter } from "next/navigation";
-import { LeadForm } from "@/components/leads/lead-form";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { PageHeader } from "@/components/ui/page-header";
 import {
-  DragDropContext,
-  Droppable,
-  Draggable,
-  DropResult,
-} from "@hello-pangea/dnd";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import { Plus } from "lucide-react";
 
-interface Lead {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  stage: string;
-  value: number;
-}
-
-const mockLeads: Record<string, Lead[]> = {
-  "Lead": [
-    { id: "1", name: "John Smith", email: "john@example.com", phone: "+1234567890", stage: "Lead", value: 5000 },
-    { id: "2", name: "Sarah Johnson", email: "sarah@example.com", phone: "+1234567891", stage: "Lead", value: 7500 },
+const initialLeads = {
+  new: [
+    { id: "1", name: "John Smith", company: "Acme Inc", value: 12000 },
+    { id: "2", name: "Sarah Wilson", company: "TechCorp", value: 24000 },
   ],
-  "Qualified": [
-    { id: "3", name: "Mike Brown", email: "mike@example.com", phone: "+1234567892", stage: "Qualified", value: 10000 },
+  contacted: [
+    { id: "3", name: "Mike Brown", company: "StartupX", value: 8000 },
+    { id: "4", name: "Lisa Chen", company: "BigCo", value: 32000 },
   ],
-  "Proposal": [
-    { id: "4", name: "Lisa Davis", email: "lisa@example.com", phone: "+1234567893", stage: "Proposal", value: 15000 },
-    { id: "5", name: "David Wilson", email: "david@example.com", phone: "+1234567894", stage: "Proposal", value: 12000 },
+  qualified: [
+    { id: "5", name: "Alex Johnson", company: "MegaCorp", value: 45000 },
   ],
-  "Won": [
-    { id: "6", name: "Emma Taylor", email: "emma@example.com", phone: "+1234567895", stage: "Won", value: 20000 },
+  proposal: [
+    { id: "6", name: "Emma Davis", company: "SmallBiz", value: 15000 },
+  ],
+  negotiation: [
+    { id: "7", name: "Tom Wilson", company: "GrowthCo", value: 28000 },
   ],
 };
 
 export default function LeadsPage() {
+  const [leads, setLeads] = useState(initialLeads);
   const router = useRouter();
-  const [leads, setLeads] = useState(mockLeads);
+  const [timeRange, setTimeRange] = useState("30");
 
-  const onDragEnd = (result: DropResult) => {
+  const onDragEnd = (result: any) => {
     if (!result.destination) return;
 
-    const sourceStage = result.source.droppableId;
-    const targetStage = result.destination.droppableId;
-    const draggedLead = leads[sourceStage][result.source.index];
+    const sourceList = leads[result.source.droppableId as keyof typeof leads];
+    const destList = leads[result.destination.droppableId as keyof typeof leads];
+    const [removed] = sourceList.splice(result.source.index, 1);
+    destList.splice(result.destination.index, 0, removed);
 
-    const newLeads = { ...leads };
-
-    // Remove from source
-    newLeads[sourceStage] = leads[sourceStage].filter(
-      (_, index) => index !== result.source.index
-    );
-
-    // Add to destination
-    draggedLead.stage = targetStage;
-    newLeads[targetStage] = [
-      ...leads[targetStage].slice(0, result.destination.index),
-      draggedLead,
-      ...leads[targetStage].slice(result.destination.index),
-    ];
-
-    setLeads(newLeads);
-  };
-
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    }).format(value);
+    setLeads({ ...leads });
   };
 
   return (
     <div className="space-y-8">
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">Leads Pipeline</h1>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button>
-              <Plus className="h-4 w-4 mr-2" /> Add Lead
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-3xl">
-            <DialogHeader>
-              <DialogTitle>Add New Lead</DialogTitle>
-              <DialogDescription>
-                Enter the lead's information below.
-              </DialogDescription>
-            </DialogHeader>
-            <LeadForm 
-              onSubmit={(data) => {
-                console.log(data); // Replace with actual submit logic
-                const newLead = {
-                  id: (leads["Lead"].length + 1).toString(),
-                  name: data.name,
-                  email: data.email,
-                  phone: data.phone,
-                  stage: data.stage,
-                  value: parseInt(data.value),
-                };
-                
-                setLeads({
-                  ...leads,
-                  [data.stage]: [...leads[data.stage], newLead],
-                });
-              }}
-              onCancel={() => {
-                // Close dialog (This will be handled by Dialog component)
-              }}
-            />
-          </DialogContent>
-        </Dialog>
-      </div>
+      <PageHeader page="pipeline">
+        <div className="flex items-center gap-4">
+          <Select value={timeRange} onValueChange={setTimeRange}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Select time range" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="7">Last 7 days</SelectItem>
+              <SelectItem value="30">Last 30 days</SelectItem>
+              <SelectItem value="90">Last 90 days</SelectItem>
+              <SelectItem value="365">Last year</SelectItem>
+            </SelectContent>
+          </Select>
 
-      <div className="grid grid-cols-4 gap-4">
-        <DragDropContext onDragEnd={onDragEnd}>
-          {Object.entries(leads).map(([stage, stageLeads]) => (
-            <div key={stage} className="space-y-4">
-              <div className="flex items-center justify-between">
-                <h2 className="font-semibold">{stage}</h2>
-                <span className="text-sm text-muted-foreground">
-                  {stageLeads.length} {stageLeads.length === 1 ? "lead" : "leads"}
-                </span>
-              </div>
+          <Button onClick={() => router.push("/dashboard/leads/new")}>
+            <Plus className="h-4 w-4 mr-2" />
+            Add Lead
+          </Button>
+        </div>
+      </PageHeader>
 
-              <Droppable droppableId={stage}>
-                {(provided: any) => (
-                  <div
-                    ref={provided.innerRef}
-                    {...provided.droppableProps}
-                    className="space-y-3"
-                  >
-                    {stageLeads.map((lead, index) => (
-                      <Draggable
-                        key={lead.id}
-                        draggableId={lead.id}
-                        index={index}
-                      >
-                        {(provided: any) => (
-                          <Card
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            className="p-4 space-y-3"
-                          >
-                            <div 
-                              className="cursor-pointer"
-                              onClick={() => router.push(`/dashboard/leads/${lead.id}`)}
+      <div className="grid gap-6">
+        {/* Pipeline Stats */}
+        <div className="grid gap-4 md:grid-cols-4">
+          <Card className="p-4">
+            <p className="text-sm font-medium text-muted-foreground">Total Value</p>
+            <p className="text-2xl font-bold mt-2">$164,000</p>
+            <p className="text-xs text-green-600 mt-1">+8% from last month</p>
+          </Card>
+          <Card className="p-4">
+            <p className="text-sm font-medium text-muted-foreground">Avg. Deal Size</p>
+            <p className="text-2xl font-bold mt-2">$20,500</p>
+            <p className="text-xs text-red-600 mt-1">-2% from last month</p>
+          </Card>
+          <Card className="p-4">
+            <p className="text-sm font-medium text-muted-foreground">Win Rate</p>
+            <p className="text-2xl font-bold mt-2">32%</p>
+            <p className="text-xs text-green-600 mt-1">+5% from last month</p>
+          </Card>
+          <Card className="p-4">
+            <p className="text-sm font-medium text-muted-foreground">Sales Cycle</p>
+            <p className="text-2xl font-bold mt-2">24 days</p>
+            <p className="text-xs text-muted-foreground mt-1">Avg. time to close</p>
+          </Card>
+        </div>
+
+        {/* Pipeline Kanban */}
+        <div className="grid grid-cols-5 gap-6">
+          <DragDropContext onDragEnd={onDragEnd}>
+            {Object.entries(leads).map(([stage, items]) => (
+              <div key={stage} className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-semibold capitalize">{stage}</h3>
+                  <Badge variant="secondary">{items.length}</Badge>
+                </div>
+                <Droppable droppableId={stage}>
+                  {(provided) => (
+                    <div
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                      className="space-y-4"
+                    >
+                      {items.map((lead, index) => (
+                        <Draggable
+                          key={lead.id}
+                          draggableId={lead.id}
+                          index={index}
+                        >
+                          {(provided) => (
+                            <Card
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              className="p-4 cursor-pointer hover:border-primary/50 transition-colors"
+                              onClick={() =>
+                                router.push(`/dashboard/leads/${lead.id}`)
+                              }
                             >
-                              <div className="flex items-start justify-between">
-                                <div>
-                                  <p className="font-medium">{lead.name}</p>
-                                  <p className="text-sm font-medium text-primary">
-                                    {formatCurrency(lead.value)}
-                                  </p>
-                                </div>
-                                <DropdownMenu>
-                                  <DropdownMenuTrigger asChild>
-                                    <Button 
-                                      variant="ghost" 
-                                      size="icon"
-                                      onClick={(e) => e.stopPropagation()}
-                                    >
-                                      <MoreVertical className="h-4 w-4" />
-                                    </Button>
-                                  </DropdownMenuTrigger>
-                                  <DropdownMenuContent align="end">
-                                    <DropdownMenuItem onSelect={(e: Event) => {
-                                      e.preventDefault();
-                                      window.location.href = `mailto:${lead.email}`;
-                                    }}>
-                                      <Mail className="h-4 w-4 mr-2" /> Email
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem onSelect={(e: Event) => {
-                                      e.preventDefault();
-                                      window.location.href = `tel:${lead.phone}`;
-                                    }}>
-                                      <Phone className="h-4 w-4 mr-2" /> Call
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem>
-                                      <Pencil className="h-4 w-4 mr-2" /> Edit
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem className="text-red-600">
-                                      <Trash2 className="h-4 w-4 mr-2" /> Delete
-                                    </DropdownMenuItem>
-                                  </DropdownMenuContent>
-                                </DropdownMenu>
-                              </div>
-                              <div className="flex gap-3 text-muted-foreground mt-3">
-                                <p className="text-xs">
-                                  {lead.email}
-                                </p>
-                              </div>
-                            </div>
-                          </Card>
-                        )}
-                      </Draggable>
-                    ))}
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            </div>
-          ))}
-        </DragDropContext>
+                              <p className="font-medium">{lead.name}</p>
+                              <p className="text-sm text-muted-foreground">
+                                {lead.company}
+                              </p>
+                              <p className="text-sm font-medium mt-2">
+                                {new Intl.NumberFormat("en-US", {
+                                  style: "currency",
+                                  currency: "USD",
+                                }).format(lead.value)}
+                              </p>
+                            </Card>
+                          )}
+                        </Draggable>
+                      ))}
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              </div>
+            ))}
+          </DragDropContext>
+        </div>
       </div>
     </div>
   );

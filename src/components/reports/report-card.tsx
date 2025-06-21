@@ -41,7 +41,8 @@ export function ReportCard({
   return (
     <Card 
       className={cn(
-        "rounded-xl border bg-card text-card-foreground shadow-sm transition-all hover:shadow-md",
+        "rounded-xl border bg-card text-card-foreground shadow-sm transition-all duration-200",
+        "hover:shadow-md hover:border-primary/20 hover:-translate-y-0.5",
         sizeClasses[size],
         className,
       )}
@@ -60,7 +61,11 @@ export function ReportCard({
             )}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-8 w-8">
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-8 w-8 opacity-50 hover:opacity-100 transition-opacity"
+                >
                   <MoreHorizontal className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
@@ -93,7 +98,7 @@ interface StatCardProps {
 
 export function StatCard({ value, label, trend, trendUp }: StatCardProps) {
   return (
-    <Card className="p-4">
+    <Card className="p-4 hover:bg-muted/50 transition-colors">
       <div className="flex items-start justify-between">
         <div>
           <p className="text-muted-foreground text-sm">{label}</p>

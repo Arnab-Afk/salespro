@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 
 import { TeamForm } from "@/components/team/team-form";
+import { PageHeader } from "@/components/ui/page-header";
 import { useState } from "react";
 
 const initialTeamMembers = [
@@ -76,16 +77,10 @@ const initialTeamMembers = [
 export default function TeamPage() {
   const [teamMembers, setTeamMembers] = useState(initialTeamMembers);
   const [dialogOpen, setDialogOpen] = useState(false);
+
   return (
     <div className="space-y-8">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold">Team</h1>
-          <p className="text-muted-foreground mt-2">
-            Manage your team members and their roles
-          </p>
-        </div>
-
+      <PageHeader page="team">
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
             <Button>
@@ -118,7 +113,7 @@ export default function TeamPage() {
             />
           </DialogContent>
         </Dialog>
-      </div>
+      </PageHeader>
 
       <div className="grid gap-6">
         {/* Team Stats */}
@@ -143,7 +138,7 @@ export default function TeamPage() {
             {teamMembers.map((member) => (
               <div
                 key={member.id}
-                className="p-6 grid grid-cols-4 gap-4 items-center"
+                className="p-6 grid grid-cols-4 gap-4 items-center hover:bg-muted/50 transition-colors"
               >
                 <div>
                   <div className="flex items-center gap-3">

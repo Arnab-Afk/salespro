@@ -1,358 +1,123 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-
-const companyFormSchema = z.object({
-  name: z.string().min(2),
-  website: z.string().url().optional(),
-  email: z.string().email(),
-  phone: z.string().min(1),
-  address: z.string().min(1),
-});
-
-const notificationFormSchema = z.object({
-  emailDigest: z.boolean(),
-  leadAssignment: z.boolean(),
-  taskReminders: z.boolean(),
-  mentions: z.boolean(),
-});
-
-const pipelineFormSchema = z.object({
-  defaultCurrency: z.string().min(1),
-  defaultStage: z.string().min(1),
-  autoAssignment: z.boolean(),
-});
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { PageHeader } from "@/components/ui/page-header";
+import { Card } from "@/components/ui/card";
 
 export default function SettingsPage() {
-  const companyForm = useForm<z.infer<typeof companyFormSchema>>({
-    resolver: zodResolver(companyFormSchema),
-    defaultValues: {
-      name: "Acme Inc",
-      website: "https://acme.com",
-      email: "contact@acme.com",
-      phone: "+1 (555) 123-4567",
-      address: "123 Main St, City, Country",
-    },
-  });
-
-  const notificationForm = useForm<z.infer<typeof notificationFormSchema>>({
-    resolver: zodResolver(notificationFormSchema),
-    defaultValues: {
-      emailDigest: true,
-      leadAssignment: true,
-      taskReminders: true,
-      mentions: true,
-    },
-  });
-
-  const pipelineForm = useForm<z.infer<typeof pipelineFormSchema>>({
-    resolver: zodResolver(pipelineFormSchema),
-    defaultValues: {
-      defaultCurrency: "USD",
-      defaultStage: "Lead",
-      autoAssignment: false,
-    },
-  });
-
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold">Settings</h1>
-        <p className="text-muted-foreground mt-2">
-          Manage your company and application settings
-        </p>
+      <PageHeader page="settings" />
+
+      <div className="grid gap-8">
+        {/* Company Settings */}
+        <Card className="p-6">
+          <div className="space-y-6">
+            <h3 className="text-lg font-medium">Company Profile</h3>
+            <div className="space-y-4">
+              <div className="grid gap-2">
+                <Label htmlFor="company-name">Company Name</Label>
+                <Input id="company-name" defaultValue="Acme Corp" />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="website">Website</Label>
+                <Input id="website" type="url" defaultValue="https://acme.com" />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="timezone">Timezone</Label>
+                <select
+                  id="timezone"
+                  className="w-full p-2 border rounded-md bg-background"
+                  defaultValue="UTC-5"
+                >
+                  <option value="UTC-8">Pacific Time (UTC-8)</option>
+                  <option value="UTC-7">Mountain Time (UTC-7)</option>
+                  <option value="UTC-6">Central Time (UTC-6)</option>
+                  <option value="UTC-5">Eastern Time (UTC-5)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </Card>
+
+        {/* Notification Settings */}
+        <Card className="p-6">
+          <div className="space-y-6">
+            <h3 className="text-lg font-medium">Notifications</h3>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="space-y-0.5">
+                  <Label>Email Notifications</Label>
+                  <p className="text-sm text-muted-foreground">
+                    Receive email updates about your leads
+                  </p>
+                </div>
+                <Switch defaultChecked />
+              </div>
+              <Separator />
+              <div className="flex items-center justify-between">
+                <div className="space-y-0.5">
+                  <Label>Task Reminders</Label>
+                  <p className="text-sm text-muted-foreground">
+                    Get notifications about upcoming tasks
+                  </p>
+                </div>
+                <Switch defaultChecked />
+              </div>
+              <Separator />
+              <div className="flex items-center justify-between">
+                <div className="space-y-0.5">
+                  <Label>Weekly Reports</Label>
+                  <p className="text-sm text-muted-foreground">
+                    Receive weekly performance reports
+                  </p>
+                </div>
+                <Switch defaultChecked />
+              </div>
+            </div>
+          </div>
+        </Card>
+
+        {/* Security Settings */}
+        <Card className="p-6">
+          <div className="space-y-6">
+            <h3 className="text-lg font-medium">Security</h3>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="space-y-0.5">
+                  <Label>Two-Factor Authentication</Label>
+                  <p className="text-sm text-muted-foreground">
+                    Add an extra layer of security to your account
+                  </p>
+                </div>
+                <Switch />
+              </div>
+              <Separator />
+              <div className="grid gap-2">
+                <Label htmlFor="current-password">Current Password</Label>
+                <Input id="current-password" type="password" />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="new-password">New Password</Label>
+                <Input id="new-password" type="password" />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="confirm-password">Confirm Password</Label>
+                <Input id="confirm-password" type="password" />
+              </div>
+            </div>
+          </div>
+        </Card>
+
+        <div className="flex justify-end gap-4">
+          <Button variant="outline">Cancel</Button>
+          <Button>Save Changes</Button>
+        </div>
       </div>
-
-      <Tabs defaultValue="company" className="space-y-6">
-        <TabsList>
-          <TabsTrigger value="company">Company</TabsTrigger>
-          <TabsTrigger value="notifications">Notifications</TabsTrigger>
-          <TabsTrigger value="pipeline">Pipeline</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="company" className="space-y-6">
-          <Card className="p-6">
-            <Form {...companyForm}>
-              <form className="space-y-6">
-                <FormField
-                  control={companyForm.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Company Name</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={companyForm.control}
-                  name="website"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Website</FormLabel>
-                      <FormControl>
-                        <Input {...field} type="url" />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <div className="grid grid-cols-2 gap-4">
-                  <FormField
-                    control={companyForm.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Email</FormLabel>
-                        <FormControl>
-                          <Input {...field} type="email" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={companyForm.control}
-                    name="phone"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Phone</FormLabel>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
-                <FormField
-                  control={companyForm.control}
-                  name="address"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Address</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <div className="flex justify-end">
-                  <Button type="submit">Save Changes</Button>
-                </div>
-              </form>
-            </Form>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="notifications" className="space-y-6">
-          <Card className="p-6">
-            <Form {...notificationForm}>
-              <form className="space-y-6">
-                <FormField
-                  control={notificationForm.control}
-                  name="emailDigest"
-                  render={({ field }) => (
-                    <FormItem className="flex items-center justify-between rounded-lg border p-4">
-                      <div className="space-y-0.5">
-                        <FormLabel className="text-base">Daily Email Digest</FormLabel>
-                        <FormDescription>
-                          Receive a daily summary of your pipeline activity
-                        </FormDescription>
-                      </div>
-                      <FormControl>
-                        <Switch
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={notificationForm.control}
-                  name="leadAssignment"
-                  render={({ field }) => (
-                    <FormItem className="flex items-center justify-between rounded-lg border p-4">
-                      <div className="space-y-0.5">
-                        <FormLabel className="text-base">Lead Assignment</FormLabel>
-                        <FormDescription>
-                          Get notified when a lead is assigned to you
-                        </FormDescription>
-                      </div>
-                      <FormControl>
-                        <Switch
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={notificationForm.control}
-                  name="taskReminders"
-                  render={({ field }) => (
-                    <FormItem className="flex items-center justify-between rounded-lg border p-4">
-                      <div className="space-y-0.5">
-                        <FormLabel className="text-base">Task Reminders</FormLabel>
-                        <FormDescription>
-                          Receive reminders for upcoming tasks
-                        </FormDescription>
-                      </div>
-                      <FormControl>
-                        <Switch
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={notificationForm.control}
-                  name="mentions"
-                  render={({ field }) => (
-                    <FormItem className="flex items-center justify-between rounded-lg border p-4">
-                      <div className="space-y-0.5">
-                        <FormLabel className="text-base">Mentions</FormLabel>
-                        <FormDescription>
-                          Get notified when someone mentions you in comments
-                        </FormDescription>
-                      </div>
-                      <FormControl>
-                        <Switch
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-
-                <div className="flex justify-end">
-                  <Button type="submit">Save Changes</Button>
-                </div>
-              </form>
-            </Form>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="pipeline" className="space-y-6">
-          <Card className="p-6">
-            <Form {...pipelineForm}>
-              <form className="space-y-6">
-                <FormField
-                  control={pipelineForm.control}
-                  name="defaultCurrency"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Default Currency</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select currency" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="USD">USD - US Dollar</SelectItem>
-                          <SelectItem value="EUR">EUR - Euro</SelectItem>
-                          <SelectItem value="GBP">GBP - British Pound</SelectItem>
-                          <SelectItem value="JPY">JPY - Japanese Yen</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={pipelineForm.control}
-                  name="defaultStage"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Default Lead Stage</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select stage" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="Lead">Lead</SelectItem>
-                          <SelectItem value="Qualified">Qualified</SelectItem>
-                          <SelectItem value="Proposal">Proposal</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={pipelineForm.control}
-                  name="autoAssignment"
-                  render={({ field }) => (
-                    <FormItem className="flex items-center justify-between rounded-lg border p-4">
-                      <div className="space-y-0.5">
-                        <FormLabel className="text-base">Auto Assignment</FormLabel>
-                        <FormDescription>
-                          Automatically assign new leads to team members
-                        </FormDescription>
-                      </div>
-                      <FormControl>
-                        <Switch
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-
-                <div className="flex justify-end">
-                  <Button type="submit">Save Changes</Button>
-                </div>
-              </form>
-            </Form>
-          </Card>
-        </TabsContent>
-      </Tabs>
     </div>
   );
 }
